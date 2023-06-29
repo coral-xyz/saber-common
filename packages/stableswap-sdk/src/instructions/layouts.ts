@@ -1,4 +1,4 @@
-import { Uint64Layout } from "@saberhq/token-utils";
+import { Uint64Layout } from "@coral-xyz/token-utils";
 import * as BufferLayout from "@solana/buffer-layout";
 
 import type { RawFees } from "../state/layout.js";

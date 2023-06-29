@@ -1,4 +1,4 @@
-import type { u64 } from "@saberhq/token-utils";
+import type { u64 } from "@coral-xyz/token-utils";
 import type { PublicKey, TransactionInstruction } from "@solana/web3.js";
 
 import type { Fees, RawFees } from "../state/index.js";

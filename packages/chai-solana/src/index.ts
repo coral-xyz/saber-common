@@ -5,9 +5,9 @@
 
 import "./types.js";
 
+import { TokenAmount } from "@coral-xyz/token-utils";
 import type { Address } from "@project-serum/anchor";
 import { BN } from "@project-serum/anchor";
-import { TokenAmount } from "@saberhq/token-utils";
 import { PublicKey } from "@solana/web3.js";
 import chaiAsPromised from "chai-as-promised";
 import { default as chaiBN } from "chai-bn";

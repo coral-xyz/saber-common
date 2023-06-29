@@ -1,6 +1,10 @@
 import type { Provider } from "@saberhq/solana-contrib";
 import { TransactionEnvelope } from "@saberhq/solana-contrib";
-import { Token as SPLToken, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import {
+  createInitializeAccountInstruction,
+  getMinimumBalanceForRentExemptAccount,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
 import type { PublicKey, Signer } from "@solana/web3.js";
 import { Keypair, SystemProgram } from "@solana/web3.js";
 
@@ -27,7 +31,8 @@ export const createTokenAccount = async ({
 }> => {
   // Allocate memory for the account
   const rentExemptAccountBalance =
-    await SPLToken.getMinBalanceRentForExemptAccount(provider.connection);
+    // await SPLToken.getMinBalanceRentForExemptAccount(provider.connection);
+    await getMinimumBalanceForRentExemptAccount(provider.connection);
   return buildCreateTokenAccountTX({
     provider,
     mint,
@@ -75,11 +80,17 @@ export const buildCreateTokenAccountTX = ({
           space: TokenAccountLayout.span,
           programId: TOKEN_PROGRAM_ID,
         }),
-        SPLToken.createInitAccountInstruction(
-          TOKEN_PROGRAM_ID,
-          mint,
+        // SPLToken.createInitAccountInstruction(
+        //   TOKEN_PROGRAM_ID,
+        //   mint,
+        //   tokenAccount,
+        //   owner
+        // ),
+        createInitializeAccountInstruction(
           tokenAccount,
-          owner
+          mint,
+          owner,
+          TOKEN_PROGRAM_ID
         ),
       ],
       [accountSigner]

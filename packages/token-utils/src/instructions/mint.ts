@@ -1,7 +1,12 @@
 import type { Provider } from "@saberhq/solana-contrib";
 import { TransactionEnvelope } from "@saberhq/solana-contrib";
-import type { u64 } from "@solana/spl-token";
-import { Token as SPLToken, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+// import type { u64 } from "@solana/buffer-layout-utils";
+import {
+  createInitializeMintInstruction,
+  createMintToInstruction as _createMintToInstruction,
+  getMinimumBalanceForRentExemptMint,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
 import type { PublicKey, Signer } from "@solana/web3.js";
 import { SystemProgram } from "@solana/web3.js";
 
@@ -29,7 +34,8 @@ export const createInitMintInstructions = async ({
     provider,
     mintKP,
     decimals,
-    rentExemptMintBalance: await SPLToken.getMinBalanceRentForExemptMint(
+    // rentExemptMintBalance:await SPLToken.getMinBalanceRentForExemptMint(
+    rentExemptMintBalance: await getMinimumBalanceForRentExemptMint(
       provider.connection
     ),
     mintAuthority,
@@ -68,12 +74,19 @@ export const createInitMintTX = ({
         lamports: rentExemptMintBalance,
         programId: TOKEN_PROGRAM_ID,
       }),
-      SPLToken.createInitMintInstruction(
-        TOKEN_PROGRAM_ID,
+      // SPLToken.createInitMintInstruction(
+      //   TOKEN_PROGRAM_ID,
+      //   mintKP.publicKey,
+      //   decimals,
+      //   mintAuthority,
+      //   freezeAuthority
+      // ),
+      createInitializeMintInstruction(
         mintKP.publicKey,
         decimals,
         mintAuthority,
-        freezeAuthority
+        freezeAuthority,
+        TOKEN_PROGRAM_ID
       ),
     ],
     [mintKP]
@@ -91,18 +104,26 @@ export const createMintToInstruction = ({
   mint: PublicKey;
   mintAuthorityKP: Signer;
   to: PublicKey;
-  amount: u64;
+  amount: bigint;
 }): TransactionEnvelope => {
   return new TransactionEnvelope(
     provider,
     [
-      SPLToken.createMintToInstruction(
-        TOKEN_PROGRAM_ID,
+      // SPLToken.createMintToInstruction(
+      //   TOKEN_PROGRAM_ID,
+      //   mint,
+      //   to,
+      //   mintAuthorityKP.publicKey,
+      //   [],
+      //   amount
+      // ),
+      _createMintToInstruction(
         mint,
         to,
         mintAuthorityKP.publicKey,
+        amount,
         [],
-        amount
+        TOKEN_PROGRAM_ID
       ),
     ],
     [mintAuthorityKP]

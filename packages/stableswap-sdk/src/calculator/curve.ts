@@ -1,4 +1,4 @@
-import { ONE, ZERO } from "@saberhq/token-utils";
+import { ONE, ZERO } from "@coral-xyz/token-utils";
 import { default as JSBI } from "jsbi";
 
 const N_COINS = JSBI.BigInt(2); // n

@@ -1,6 +1,6 @@
+import type { ProgramAccount } from "@coral-xyz/token-utils";
+import { TOKEN_PROGRAM_ID } from "@coral-xyz/token-utils";
 import { getProgramAddress } from "@saberhq/solana-contrib";
-import type { ProgramAccount } from "@saberhq/token-utils";
-import { TOKEN_PROGRAM_ID } from "@saberhq/token-utils";
 import type { Connection, TransactionInstruction } from "@solana/web3.js";
 import { PublicKey } from "@solana/web3.js";
 

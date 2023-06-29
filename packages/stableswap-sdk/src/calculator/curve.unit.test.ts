@@ -1,4 +1,4 @@
-import type { BigintIsh } from "@saberhq/token-utils";
+import type { BigintIsh } from "@coral-xyz/token-utils";
 import { default as JSBI } from "jsbi";
 
 import { computeD, computeY } from "./curve.js";

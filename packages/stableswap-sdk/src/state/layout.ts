@@ -1,4 +1,4 @@
-import { PublicKeyLayout, Uint64Layout } from "@saberhq/token-utils";
+import { PublicKeyLayout, Uint64Layout } from "@coral-xyz/token-utils";
 import * as BufferLayout from "@solana/buffer-layout";
 
 /**

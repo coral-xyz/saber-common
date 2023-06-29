@@ -39,13 +39,12 @@ export * from "./common.js";
 // re-export SPL token types
 export type {
   AuthorityType,
-  MintInfo as MintData,
-  MultisigInfo,
+  Mint as MintData,
+  Multisig,
 } from "@solana/spl-token";
 export {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   NATIVE_MINT,
-  Token as SPLToken,
   TOKEN_PROGRAM_ID,
-  u64,
 } from "@solana/spl-token";
+export { u64 } from "@solana/buffer-layout-utils";

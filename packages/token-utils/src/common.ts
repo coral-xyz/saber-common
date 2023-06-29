@@ -3,8 +3,13 @@
  */
 
 import type { Provider } from "@saberhq/solana-contrib";
-import type { MintInfo } from "@solana/spl-token";
-import { Token as SPLToken, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import type { Mint as MintInfo } from "@solana/spl-token";
+import {
+  createInitializeAccountInstruction,
+  createInitializeMintInstruction,
+  createMintToInstruction,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
 import type { TransactionInstruction } from "@solana/web3.js";
 import {
   Keypair,
@@ -93,13 +98,20 @@ export async function createMintInstructions(
       ),
       programId: TOKEN_PROGRAM_ID,
     }),
-    SPLToken.createInitMintInstruction(
-      TOKEN_PROGRAM_ID,
+    createInitializeMintInstruction(
       mint,
       decimals,
       authority,
-      null
+      null,
+      TOKEN_PROGRAM_ID
     ),
+    // SPLToken.createInitMintInstruction(
+    //   TOKEN_PROGRAM_ID,
+    //   mint,
+    //   decimals,
+    //   authority,
+    //   null
+    // ),
   ];
   return instructions;
 }
@@ -132,19 +144,33 @@ export async function createMintAndVault(
       ),
       programId: TOKEN_PROGRAM_ID,
     }),
-    SPLToken.createInitAccountInstruction(
-      TOKEN_PROGRAM_ID,
-      mint.publicKey,
+    // SPLToken.createInitAccountInstruction(
+    //   TOKEN_PROGRAM_ID,
+    //   mint.publicKey,
+    //   vault.publicKey,
+    //   owner
+    // ),
+    createInitializeAccountInstruction(
       vault.publicKey,
-      owner
+      mint.publicKey,
+      owner,
+      TOKEN_PROGRAM_ID
     ),
-    SPLToken.createMintToInstruction(
-      TOKEN_PROGRAM_ID,
+    // SPLToken.createMintToInstruction(
+    //   TOKEN_PROGRAM_ID,
+    //   mint.publicKey,
+    //   vault.publicKey,
+    //   provider.wallet.publicKey,
+    //   [],
+    //   amount
+    // )
+    createMintToInstruction(
       mint.publicKey,
       vault.publicKey,
       provider.wallet.publicKey,
+      BigInt(amount.toString()),
       [],
-      amount
+      TOKEN_PROGRAM_ID
     )
   );
   await provider.send(tx, [mint, vault]);
@@ -169,11 +195,17 @@ export async function createTokenAccountInstrs(
       lamports,
       programId: TOKEN_PROGRAM_ID,
     }),
-    SPLToken.createInitAccountInstruction(
-      TOKEN_PROGRAM_ID,
-      mint,
+    // SPLToken.createInitAccountInstruction(
+    //   TOKEN_PROGRAM_ID,
+    //   mint,
+    //   newAccountPubkey,
+    //   owner
+    // ),
+    createInitializeAccountInstruction(
       newAccountPubkey,
-      owner
+      mint,
+      owner,
+      TOKEN_PROGRAM_ID
     ),
   ];
 }

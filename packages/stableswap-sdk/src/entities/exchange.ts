@@ -1,11 +1,11 @@
-import type { TokenInfo } from "@saberhq/token-utils";
+import type { TokenInfo } from "@coral-xyz/token-utils";
 import {
   deserializeAccount,
   deserializeMint,
   parseBigintIsh,
   Token,
   TokenAmount,
-} from "@saberhq/token-utils";
+} from "@coral-xyz/token-utils";
 import type { Connection, PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import type { default as JSBI } from "jsbi";

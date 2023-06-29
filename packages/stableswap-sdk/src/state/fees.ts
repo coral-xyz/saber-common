@@ -1,4 +1,4 @@
-import { Percent, u64 } from "@saberhq/token-utils";
+import { Percent, u64 } from "@coral-xyz/token-utils";
 
 import type { RawFees } from "./layout.js";
 

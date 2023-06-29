@@ -1,3 +1,4 @@
+import { createMintToInstruction, createTransferInstruction} from "@solana/spl-token";
 import type {
   AugmentedProvider,
   Provider,
@@ -5,7 +6,7 @@ import type {
   TransactionEnvelope,
 } from "@saberhq/solana-contrib";
 import { SolanaAugmentedProvider } from "@saberhq/solana-contrib";
-import type { MintInfo } from "@solana/spl-token";
+import type { Mint as MintInfo } from "@solana/spl-token";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import type { Signer } from "@solana/web3.js";
 import { Keypair } from "@solana/web3.js";
@@ -13,7 +14,6 @@ import { Keypair } from "@solana/web3.js";
 import { getATAAddress, getATAAddresses } from "./ata.js";
 import { createMintInstructions, DEFAULT_TOKEN_DECIMALS } from "./common.js";
 import type { TokenAmount, TokenInfo } from "./index.js";
-import { SPLToken } from "./index.js";
 import { getOrCreateATA, getOrCreateATAs } from "./instructions/ata.js";
 import type { TokenAccountData } from "./layout.js";
 import { deserializeAccount, deserializeMint } from "./layout.js";
@@ -75,13 +75,21 @@ export class TokenAugmentedProvider
       source = sourceATA.address;
     }
     txEnv.append(
-      SPLToken.createTransferInstruction(
-        TOKEN_PROGRAM_ID,
+      // SPLToken.createTransferInstruction(
+      //   TOKEN_PROGRAM_ID,
+      //   source,
+      //   destination,
+      //   this.walletKey,
+      //   [],
+      //   amount.toU64()
+      // )
+      createTransferInstruction(
         source,
         destination,
         this.walletKey,
+        amount.toU64(),
         [],
-        amount.toU64()
+        TOKEN_PROGRAM_ID,
       )
     );
     return txEnv;
@@ -221,13 +229,21 @@ export class TokenAugmentedProvider
     destination: PublicKey;
   }): TransactionEnvelope {
     return this.newTX([
-      SPLToken.createMintToInstruction(
-        TOKEN_PROGRAM_ID,
+      // SPLToken.createMintToInstruction(
+      //   TOKEN_PROGRAM_ID,
+      //   amount.token.mintAccount,
+      //   destination,
+      //   this.walletKey,
+      //   [],
+      //   amount.toU64()
+      // ),
+      createMintToInstruction(
         amount.token.mintAccount,
         destination,
         this.walletKey,
+        amount.toU64(),
         [],
-        amount.toU64()
+        TOKEN_PROGRAM_ID,
       ),
     ]);
   }

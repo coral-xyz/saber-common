@@ -1,5 +1,5 @@
-import type { Token } from "@saberhq/token-utils";
-import { Fraction, ONE, TokenAmount, ZERO } from "@saberhq/token-utils";
+import type { Token } from "@coral-xyz/token-utils";
+import { Fraction, ONE, TokenAmount, ZERO } from "@coral-xyz/token-utils";
 import { default as JSBI } from "jsbi";
 
 import type { IExchangeInfo } from "../entities/exchange.js";

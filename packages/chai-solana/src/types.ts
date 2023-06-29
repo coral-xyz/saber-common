@@ -3,8 +3,8 @@
 import "chai-bn";
 import "chai-as-promised";
 
+import type { BigintIsh, TokenAmount } from "@coral-xyz/token-utils";
 import type { Address } from "@project-serum/anchor";
-import type { BigintIsh, TokenAmount } from "@saberhq/token-utils";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

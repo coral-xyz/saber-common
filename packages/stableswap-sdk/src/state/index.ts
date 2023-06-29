@@ -1,4 +1,4 @@
-import { u64 } from "@saberhq/token-utils";
+import { u64 } from "@coral-xyz/token-utils";
 import { PublicKey } from "@solana/web3.js";
 
 import type { SwapTokenInfo } from "../instructions/swap.js";

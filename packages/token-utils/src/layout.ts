@@ -1,11 +1,14 @@
 import { PublicKey } from "@saberhq/solana-contrib";
 import type { Layout } from "@solana/buffer-layout";
 import * as BufferLayout from "@solana/buffer-layout";
-import type { AccountInfo, MintInfo } from "@solana/spl-token";
+import { u64 } from "@solana/buffer-layout-utils";
+import type {
+  Account as AccountInfo,
+  Mint as MintInfo,
+} from "@solana/spl-token";
 import {
   AccountLayout,
   MintLayout as TokenMintLayout,
-  u64,
 } from "@solana/spl-token";
 
 export {
@@ -44,32 +47,12 @@ export const Uint64Layout = (property = "uint64"): BufferLayout.Blob => {
 /**
  * Layout for a TokenAccount.
  */
-export const TokenAccountLayout = AccountLayout as Layout<{
-  mint: Buffer;
-  owner: Buffer;
-  amount: Buffer;
-  delegateOption: number;
-  delegate: Buffer;
-  state: number;
-  delegatedAmount: Buffer;
-  isNativeOption: number;
-  isNative: Buffer;
-  closeAuthorityOption: number;
-  closeAuthority: Buffer;
-}>;
+export const TokenAccountLayout = AccountLayout;
 
 /**
  * Layout for a Mint.
  */
-export const MintLayout = TokenMintLayout as Layout<{
-  mintAuthorityOption: number;
-  mintAuthority: Buffer;
-  supply: Buffer;
-  decimals: number;
-  isInitialized: number;
-  freezeAuthorityOption: number;
-  freezeAuthority: Buffer;
-}>;
+export const MintLayout = TokenMintLayout;
 
 /**
  * Data in an SPL token account.
@@ -87,23 +70,23 @@ export const deserializeAccount = (data: Buffer): TokenAccountData => {
 
   const mint = new PublicKey(accountInfo.mint);
   const owner = new PublicKey(accountInfo.owner);
-  const amount = u64.fromBuffer(accountInfo.amount);
+  const amount = accountInfo.amount;
 
   let delegate: PublicKey | null;
-  let delegatedAmount: u64;
+  let delegatedAmount: bigint;
 
   if (accountInfo.delegateOption === 0) {
     delegate = null;
-    delegatedAmount = new u64(0);
+    delegatedAmount = BigInt(0);
   } else {
     delegate = new PublicKey(accountInfo.delegate);
-    delegatedAmount = u64.fromBuffer(accountInfo.delegatedAmount);
+    delegatedAmount = accountInfo.delegatedAmount;
   }
 
   const isInitialized = accountInfo.state !== 0;
   const isFrozen = accountInfo.state === 2;
 
-  let rentExemptReserve: u64 | null;
+  let rentExemptReserve: bigint | null;
   let isNative: boolean;
 
   if (accountInfo.isNativeOption === 1) {
@@ -132,6 +115,7 @@ export const deserializeAccount = (data: Buffer): TokenAccountData => {
     rentExemptReserve,
     isNative,
     closeAuthority,
+    tlvData: Buffer.from([]),
   };
 };
 
@@ -154,8 +138,8 @@ export const deserializeMint = (data: Buffer): MintInfo => {
     mintAuthority = new PublicKey(mintInfo.mintAuthority);
   }
 
-  const supply = u64.fromBuffer(mintInfo.supply);
-  const isInitialized = mintInfo.isInitialized !== 0;
+  const supply = mintInfo.supply;
+  const isInitialized = Boolean(mintInfo.isInitialized);
 
   let freezeAuthority: PublicKey | null;
   if (mintInfo.freezeAuthorityOption === 0) {
@@ -170,5 +154,7 @@ export const deserializeMint = (data: Buffer): MintInfo => {
     decimals: mintInfo.decimals,
     isInitialized,
     freezeAuthority,
+    address: PublicKey.default,
+    tlvData: Buffer.from([]),
   };
 };

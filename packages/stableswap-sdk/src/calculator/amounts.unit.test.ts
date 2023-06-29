@@ -1,5 +1,5 @@
-import type { BigintIsh } from "@saberhq/token-utils";
-import { Percent, Token as SToken, TokenAmount } from "@saberhq/token-utils";
+import type { BigintIsh } from "@coral-xyz/token-utils";
+import { Percent, Token as SToken, TokenAmount } from "@coral-xyz/token-utils";
 import { PublicKey } from "@solana/web3.js";
 import { BN } from "bn.js";
 import { default as JSBI } from "jsbi";

@@ -1,4 +1,3 @@
-import { u64 } from "@solana/spl-token";
 import type { BigintIsh, FractionObject } from "@ubeswap/token-math";
 import {
   parseAmountFromString,
@@ -57,7 +56,8 @@ export class TokenAmount extends UTokenAmount<Token> {
   divideByInteger(other: BigintIsh): TokenAmount {
     return new TokenAmount(
       this.token,
-      this.toU64().div(new BN(parseBigintIsh(other).toString()))
+      new BN(this.toString()).div(new BN(parseBigintIsh(other).toString()))
+      // this / BigInt(parseBigintIsh(other).toString())
     );
   }
 
@@ -84,7 +84,7 @@ export class TokenAmount extends UTokenAmount<Token> {
    * Converts this to the raw u64 used by the SPL library
    * @returns
    */
-  toU64(): u64 {
-    return new u64(this.raw.toString());
+  toU64(): bigint {
+    return BigInt(this.raw.toString());
   }
 }

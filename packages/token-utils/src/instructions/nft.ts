@@ -1,5 +1,6 @@
 import type { Provider, TransactionEnvelope } from "@saberhq/solana-contrib";
-import { Token as SPLToken, TOKEN_PROGRAM_ID, u64 } from "@solana/spl-token";
+import { AuthorityType, createMintToInstruction,createSetAuthorityInstruction, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { u64} from "@solana/buffer-layout-utils";
 import type { PublicKey, Signer } from "@solana/web3.js";
 
 import { getOrCreateATA } from "./ata.js";
@@ -31,24 +32,40 @@ export const mintNFT = async (
   }
   // Mint to owner's ATA
   tx.instructions.push(
-    SPLToken.createMintToInstruction(
-      TOKEN_PROGRAM_ID,
+    // SPLToken.createMintToInstruction(
+    //   TOKEN_PROGRAM_ID,
+    //   mintKP.publicKey,
+    //   address,
+    //   tempMintAuthority,
+    //   [],
+    //   new u64(1)
+    // )
+    createMintToInstruction(
       mintKP.publicKey,
       address,
       tempMintAuthority,
+      new u64(1),
       [],
-      new u64(1)
+      TOKEN_PROGRAM_ID,
     )
   );
   // Set mint authority of the NFT to NULL
   tx.instructions.push(
-    SPLToken.createSetAuthorityInstruction(
-      TOKEN_PROGRAM_ID,
+    // SPLToken.createSetAuthorityInstruction(
+    //   TOKEN_PROGRAM_ID,
+    //   mintKP.publicKey,
+    //   null,
+    //   "MintTokens",
+    //   tempMintAuthority,
+    //   []
+    // )
+    createSetAuthorityInstruction(
       mintKP.publicKey,
-      null,
-      "MintTokens",
       tempMintAuthority,
-      []
+      AuthorityType.MintTokens,
+      null,
+      [],
+      TOKEN_PROGRAM_ID
     )
   );
 

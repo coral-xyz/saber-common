@@ -1,8 +1,8 @@
 import type { Provider } from "@saberhq/solana-contrib";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
-  Token,
   TOKEN_PROGRAM_ID,
+  createAssociatedTokenAccountInstruction
 } from "@solana/spl-token";
 import type { TransactionInstruction } from "@solana/web3.js";
 import { PublicKey } from "@solana/web3.js";
@@ -155,11 +155,19 @@ export const createATAInstruction = ({
   owner: PublicKey;
   payer: PublicKey;
 }): TransactionInstruction =>
-  Token.createAssociatedTokenAccountInstruction(
-    ASSOCIATED_TOKEN_PROGRAM_ID,
-    TOKEN_PROGRAM_ID,
-    mint,
+  // Token.createAssociatedTokenAccountInstruction(
+  //   ASSOCIATED_TOKEN_PROGRAM_ID,
+  //   TOKEN_PROGRAM_ID,
+  //   mint,
+  //   address,
+  //   owner,
+  //   payer
+  // );
+  createAssociatedTokenAccountInstruction(
+    payer,
     address,
     owner,
-    payer
+    mint,
+    TOKEN_PROGRAM_ID,
+    ASSOCIATED_TOKEN_PROGRAM_ID,
   );

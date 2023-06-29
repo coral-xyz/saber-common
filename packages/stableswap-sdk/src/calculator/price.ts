@@ -1,4 +1,4 @@
-import { Price, TokenAmount } from "@saberhq/token-utils";
+import { Price, TokenAmount } from "@coral-xyz/token-utils";
 import BN from "bn.js";
 
 import type { IExchangeInfo } from "../index.js";

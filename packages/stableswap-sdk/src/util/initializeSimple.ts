@@ -1,6 +1,6 @@
 import type { Provider } from "@saberhq/solana-contrib";
 import { TransactionEnvelope } from "@saberhq/solana-contrib";
-import type { TokenAmount } from "@saberhq/token-utils";
+import type { TokenAmount } from "@coral-xyz/token-utils";
 import {
   buildCreateTokenAccountTX,
   createATAInstruction,
@@ -8,7 +8,7 @@ import {
   getATAAddressSync,
   SPLToken,
   TOKEN_PROGRAM_ID,
-} from "@saberhq/token-utils";
+} from "@coral-xyz/token-utils";
 import type { PublicKey } from "@solana/web3.js";
 import { Keypair } from "@solana/web3.js";
 

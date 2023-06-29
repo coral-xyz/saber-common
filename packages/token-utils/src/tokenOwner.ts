@@ -1,11 +1,13 @@
 import type { PublicKey } from "@saberhq/solana-contrib";
 import type { TransactionInstruction } from "@solana/web3.js";
-
+import { createAssociatedTokenAccountInstruction,
+  createMintToInstruction,
+  createTransferCheckedInstruction,
+  createTransferInstruction} from "@solana/spl-token";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   getATAAddress,
   getATAAddressSync,
-  SPLToken,
   TOKEN_PROGRAM_ID,
 } from "./index.js";
 import type { TokenAmount } from "./tokenAmount.js";
@@ -44,13 +46,21 @@ export class TokenOwner {
     amount: TokenAmount,
     to: PublicKey
   ): Promise<TransactionInstruction> {
-    return SPLToken.createTransferInstruction(
-      TOKEN_PROGRAM_ID,
+    // return SPLToken.createTransferInstruction(
+    //   TOKEN_PROGRAM_ID,
+    //   await this.getATA(amount.token.mintAccount),
+    //   to,
+    //   this.owner,
+    //   [],
+    //   amount.toU64()
+    // );
+    return createTransferInstruction(
       await this.getATA(amount.token.mintAccount),
       to,
       this.owner,
+      amount.toU64(),
       [],
-      amount.toU64()
+      TOKEN_PROGRAM_ID,
     );
   }
 
@@ -64,15 +74,25 @@ export class TokenOwner {
     amount: TokenAmount,
     to: PublicKey
   ): Promise<TransactionInstruction> {
-    return SPLToken.createTransferCheckedInstruction(
-      TOKEN_PROGRAM_ID,
+    // return SPLToken.createTransferCheckedInstruction(
+    //   TOKEN_PROGRAM_ID,
+    //   await this.getATA(amount.token.mintAccount),
+    //   amount.token.mintAccount,
+    //   to,
+    //   this.owner,
+    //   [],
+    //   amount.toU64(),
+    //   amount.token.decimals
+    // );
+    return createTransferCheckedInstruction(
       await this.getATA(amount.token.mintAccount),
       amount.token.mintAccount,
       to,
       this.owner,
-      [],
       amount.toU64(),
-      amount.token.decimals
+      amount.token.decimals,
+      [],
+      TOKEN_PROGRAM_ID
     );
   }
 
@@ -83,13 +103,21 @@ export class TokenOwner {
    * @returns The transaction instruction.
    */
   mintTo(amount: TokenAmount, to: PublicKey): TransactionInstruction {
-    return SPLToken.createMintToInstruction(
-      TOKEN_PROGRAM_ID,
+    // return SPLToken.createMintToInstruction(
+    //   TOKEN_PROGRAM_ID,
+    //   amount.token.mintAccount,
+    //   to,
+    //   this.owner,
+    //   [],
+    //   amount.toU64()
+    // );
+    return createMintToInstruction(
       amount.token.mintAccount,
       to,
       this.owner,
+      amount.toU64(),
       [],
-      amount.toU64()
+      TOKEN_PROGRAM_ID,
     );
   }
 
@@ -103,13 +131,21 @@ export class TokenOwner {
     mint: PublicKey,
     payer: PublicKey = this.owner
   ): Promise<TransactionInstruction> {
-    return SPLToken.createAssociatedTokenAccountInstruction(
-      ASSOCIATED_TOKEN_PROGRAM_ID,
-      TOKEN_PROGRAM_ID,
-      mint,
+    return createAssociatedTokenAccountInstruction(
+      payer,
       await this.getATA(mint),
       this.owner,
-      payer
+      mint,
+      TOKEN_PROGRAM_ID,
+      ASSOCIATED_TOKEN_PROGRAM_ID,
     );
+    // return SPLToken.createAssociatedTokenAccountInstruction(
+    //   ASSOCIATED_TOKEN_PROGRAM_ID,
+    //   TOKEN_PROGRAM_ID,
+    //   mint,
+    //   await this.getATA(mint),
+    //   this.owner,
+    //   payer
+    // );
   }
 }

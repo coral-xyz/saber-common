@@ -7,7 +7,7 @@ import {
   SPLToken,
   TOKEN_PROGRAM_ID,
   u64,
-} from "@saberhq/token-utils";
+} from "@coral-xyz/token-utils";
 import type {
   Signer,
   TransactionInstruction,
